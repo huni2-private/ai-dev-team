@@ -151,7 +151,59 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 ---
 
+## 문제 → 선택 → 결과
+
+**문제.** Claude Code로 혼자 개발하면 AI가 PM·설계·구현·검증을 동시에 담당하면서 역할 경계가 허물어진다. "설계 없는 구현"이 반복되고, 맥락이 길어질수록 초기 결정에서 조용히 이탈한다.
+
+**선택.** 역할을 강제하는 구조를 만들었다. CLAUDE.md에 PM/TechLead/Dev/QA/DevOps 5개 페르소나를 정의하고, `.aidev.json` 한 파일로 다른 프로젝트에 이식한다. 웹 대시보드에서 프로젝트를 생성하면 `.aidev.json`을 자동 생성해 5분 안에 연동 가능하다.
+
+**결과.** 각 SDLC 단계가 명확한 담당 페르소나로 분리된다. `/drift-detect`로 구현이 설계에서 이탈했는지 즉시 감지한다. 새 프로젝트 적용은 CLAUDE.md 한 줄 추가 + `.aidev.json` 복사로 완료된다.
+
+---
+
 ## 아키텍처
+
+```mermaid
+graph TD
+    User["개발자"] -->|세션 시작| CC["Claude Code"]
+    CC -->|자동 로드| CLAUDE_MD["CLAUDE.md\n팀 규칙 + 페르소나 정의"]
+    CC -->|자동 로드| AiDevJson[".aidev.json\nSDLC 단계 + 활성 페르소나"]
+
+    subgraph "SDLC 사이클"
+        PM_Node["PM\n요구사항 분석"] --> TL["TechLead\n아키텍처 설계"]
+        TL --> Dev_Node["Dev\n구현"]
+        Dev_Node --> QA_Node["QA\n검증"]
+        QA_Node --> DO["DevOps\nCI/CD · 배포"]
+    end
+
+    CC -->|"/activate-persona [role]"| PM_Node
+    CC -->|/drift-detect| Drift["방향 이탈 탐지\n설계 문서 vs 구현 비교"]
+    CC -->|/team-status| Status["SDLC 단계 + 다음 액션 보고"]
+
+    subgraph "웹 대시보드 (Next.js 15 + Supabase)"
+        Dashboard["프로젝트 목록"] --> NewProj["프로젝트 생성"]
+        Dashboard --> Personas_Page["페르소나 관리\n3-파트 편집기"]
+        NewProj --> Connect[".aidev.json 생성\n5단계 연동 가이드"]
+    end
+
+    Connect -->|루트에 복사| OtherProject["타 프로젝트\n.aidev.json + .claude/commands/"]
+```
+
+---
+
+## 기술 스택 & 선택 이유
+
+| 기술 | 선택 이유 |
+|------|-----------|
+| **Claude Code CLAUDE.md** | AI 세션마다 자동 로드되는 컨텍스트 주입 지점. 페르소나 정의를 여기에 두면 별도 설정 없이 모든 세션에 적용된다 |
+| **`.aidev.json`** | 팀 규칙을 한 파일로 캡슐화. 다른 프로젝트 루트에 복사만 하면 이식 완료. CLAUDE.md 수정 없이 프로젝트별 설정 분리 가능 |
+| **CC Slash Commands** | `/activate-persona`, `/drift-detect` 같은 워크플로우 액션을 명령어로 표준화. 개발자가 단계 전환을 명시적으로 제어 |
+| **Next.js 15 + Turbopack** | 웹 대시보드. App Router 서버 컴포넌트로 Supabase 직접 조회, API 레이어 불필요 |
+| **Supabase** | 프로젝트·페르소나 데이터 저장. PostgreSQL + Auth 무료 티어로 운영. `.aidev.json` 생성 로직의 데이터 소스 |
+
+---
+
+## 프로젝트 구조
 
 ```
 ai-dev-team/
@@ -166,7 +218,7 @@ ai-dev-team/
 ├── .aidev.json            ← 연동 config (웹 대시보드가 생성)
 ├── docs/
 │   └── personas/          ← 페르소나 상세 정의
-└── web/                   ← Next.js 대시보드
+└── web/                   ← Next.js 15 대시보드
     ├── app/               ← App Router 페이지
     ├── components/        ← UI 컴포넌트
     ├── lib/               ← 비즈니스 로직
