@@ -36,7 +36,7 @@ export function ProjectPhaseSelect({ projectId, currentPhase }: Props) {
             updateProjectPhase(projectId, e.target.value as SdlcPhase);
           });
         }}
-        className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-black bg-white disabled:opacity-50"
+        className="border border-hairline rounded-md px-3 py-1.5 text-caption text-ink focus:outline-none focus:ring-2 focus:ring-primary-focus bg-canvas disabled:opacity-50"
       >
         {PHASES_ORDER.map((phase) => (
           <option key={phase} value={phase}>
@@ -49,7 +49,7 @@ export function ProjectPhaseSelect({ projectId, currentPhase }: Props) {
         <button
           onClick={handleAdvance}
           disabled={isPending}
-          className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+          className="px-[15px] py-2 text-button-utility bg-ink text-white rounded-sm hover:bg-ink/90 active:scale-95 transition-all disabled:opacity-50"
         >
           {isPending ? "저장 중..." : `→ ${SDLC_PHASES[nextPhase].label} 진행`}
         </button>

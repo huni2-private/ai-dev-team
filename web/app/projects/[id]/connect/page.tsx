@@ -1,29 +1,30 @@
-// Design Ref: §5.1 /projects/[id]/connect — 연동 config 생성 & 다운로드
-// Plan SC: FR-10 연동 config 생성 & 다운로드
-
+// 연동 config 생성 & 다운로드 페이지
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db as bkend } from "@/lib/db";
 import { generateAiDevConfig } from "@/lib/config-generator";
-import { DEFAULT_PERSONAS } from "@/lib/default-personas";
+import { DEFAULT_TEAM_PERSONAS, DEFAULT_DOMAIN_PERSONAS } from "@/lib/default-personas";
 import { ConfigGenerator } from "@/components/connect/ConfigGenerator";
 import { IntegrationGuide } from "@/components/connect/IntegrationGuide";
 import type { PersonaRecord, PersonaRole } from "@/types/aidev";
 
 function defaultPersonasAsRecords(): PersonaRecord[] {
-  return DEFAULT_PERSONAS.map((p, i) => ({
-    _id: `default-${i}`,
-    role: p.role,
-    displayName: p.displayName,
-    systemPrompt: p.systemPrompt,
-    canDo: p.canDo,
-    cannotDo: p.cannotDo,
-    delegateTo: p.delegateTo,
-    isDefault: true,
+  const now = new Date().toISOString();
+  const team: PersonaRecord[] = DEFAULT_TEAM_PERSONAS.map((p, i) => ({
+    ...p,
+    _id: `default-team-${i}`,
     createdBy: "system",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
   }));
+  const domain: PersonaRecord[] = DEFAULT_DOMAIN_PERSONAS.map((p, i) => ({
+    ...p,
+    _id: `default-domain-${i}`,
+    createdBy: "system",
+    createdAt: now,
+    updatedAt: now,
+  }));
+  return [...team, ...domain];
 }
 
 interface Props {
@@ -37,16 +38,19 @@ export default async function ConnectPage({ params }: Props) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-10">
         <div className="mb-8">
-          <Link href={`/projects/${id}`} className="text-sm text-gray-400 hover:text-gray-600">
+          <Link href={`/projects/${id}`} className="text-caption text-ink-muted-48 hover:text-ink">
             ← 프로젝트 상세
           </Link>
-          <h1 className="text-2xl font-bold mt-3">연동 Config</h1>
+          <h1 className="text-display-md text-ink mt-3">연동 Config</h1>
         </div>
-        <div className="rounded-lg bg-amber-50 border border-amber-200 px-5 py-4 text-sm text-amber-800">
-          <p className="font-semibold mb-1">bkend.ai 연결이 필요합니다</p>
+        <div className="rounded-md bg-amber-50 border border-amber-200 px-5 py-4 text-caption text-amber-800">
+          <p className="font-semibold mb-1">Firebase 연결이 필요합니다</p>
           <p>
-            .env.local에 <code className="font-mono bg-amber-100 px-1 rounded">NEXT_PUBLIC_SUPABASE_URL</code>과{" "}
-            <code className="font-mono bg-amber-100 px-1 rounded">SUPABASE_SERVICE_ROLE_KEY</code>를 설정한 후 서버를 재시작하세요.
+            .env.local에{" "}
+            <code className="font-mono bg-amber-100 px-1 rounded-xs">FIREBASE_PROJECT_ID</code>,{" "}
+            <code className="font-mono bg-amber-100 px-1 rounded-xs">FIREBASE_CLIENT_EMAIL</code>,{" "}
+            <code className="font-mono bg-amber-100 px-1 rounded-xs">FIREBASE_PRIVATE_KEY</code>를
+            설정한 후 서버를 재시작하세요.
           </p>
         </div>
       </div>
@@ -61,7 +65,6 @@ export default async function ConnectPage({ params }: Props) {
     notFound();
   }
 
-  // activePersonas가 비어있으면 현재 단계 담당 페르소나 기본 선택
   if (project.activePersonas.length === 0) {
     const phasePersonaMap: Record<string, PersonaRole> = {
       plan: "pm",
@@ -87,11 +90,11 @@ export default async function ConnectPage({ params }: Props) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
       <div className="mb-8">
-        <Link href={`/projects/${id}`} className="text-sm text-gray-400 hover:text-gray-600">
+        <Link href={`/projects/${id}`} className="text-caption text-ink-muted-48 hover:text-ink">
           ← 프로젝트 상세
         </Link>
-        <h1 className="text-2xl font-bold mt-3">연동 Config</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-display-md text-ink mt-3">연동 Config</h1>
+        <p className="text-caption text-ink-muted-48 mt-1">
           .aidev.json을 생성하고 대상 프로젝트에 복사하면 AI Dev Team을 사용할 수 있습니다.
         </p>
       </div>

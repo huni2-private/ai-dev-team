@@ -4,7 +4,7 @@
 
 import { useState, useTransition } from "react";
 import { setActivePersonas } from "@/app/actions";
-import type { PersonaRecord, PersonaRole } from "@/types/aidev";
+import type { PersonaRecord, TeamPersonaRecord, PersonaRole } from "@/types/aidev";
 import { PERSONA_LABELS } from "@/types/aidev";
 import { Badge } from "@/components/ui/Badge";
 
@@ -18,6 +18,11 @@ export function PersonaToggleList({ projectId, allPersonas, activePersonas: init
   const [active, setActive] = useState(new Set(initial));
   const [isPending, startTransition] = useTransition();
 
+  // 팀 페르소나만 SDLC 토글 대상
+  const teamPersonas = allPersonas.filter(
+    (p): p is TeamPersonaRecord => p.personaType === "team"
+  );
+
   function toggle(role: PersonaRole) {
     const next = new Set(active);
     if (next.has(role)) next.delete(role);
@@ -28,11 +33,11 @@ export function PersonaToggleList({ projectId, allPersonas, activePersonas: init
     });
   }
 
-  if (allPersonas.length === 0) {
+  if (teamPersonas.length === 0) {
     return (
-      <p className="text-sm text-gray-400">
+      <p className="text-caption text-ink-muted-48">
         페르소나가 없습니다.{" "}
-        <a href="/personas/new" className="text-blue-600 hover:underline">
+        <a href="/personas/new" className="text-primary hover:underline">
           페르소나 추가
         </a>
       </p>
@@ -41,23 +46,23 @@ export function PersonaToggleList({ projectId, allPersonas, activePersonas: init
 
   return (
     <div className="space-y-2">
-      {allPersonas.map((persona) => {
+      {teamPersonas.map((persona) => {
         const isActive = active.has(persona.role);
         return (
           <div
             key={persona._id}
-            className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0"
+            className="flex items-center justify-between py-2 border-b border-divider-soft last:border-0"
           >
             <div className="flex items-center gap-2">
               <Badge variant="role" value={persona.role} />
-              <span className="text-sm">{persona.displayName}</span>
-              <span className="text-xs text-gray-400">{PERSONA_LABELS[persona.role]}</span>
+              <span className="text-caption text-ink">{persona.displayName}</span>
+              <span className="text-xs text-ink-muted-48">{PERSONA_LABELS[persona.role]}</span>
             </div>
             <button
               onClick={() => toggle(persona.role)}
               disabled={isPending}
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors disabled:opacity-50 ${
-                isActive ? "bg-black" : "bg-gray-200"
+                isActive ? "bg-primary" : "bg-hairline"
               }`}
               aria-label={isActive ? "비활성화" : "활성화"}
             >
@@ -71,7 +76,7 @@ export function PersonaToggleList({ projectId, allPersonas, activePersonas: init
         );
       })}
       {isPending && (
-        <p className="text-xs text-gray-400 pt-1">저장 중...</p>
+        <p className="text-xs text-ink-muted-48 pt-1">저장 중...</p>
       )}
     </div>
   );

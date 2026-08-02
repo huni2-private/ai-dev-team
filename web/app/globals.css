@@ -1,1 +1,92 @@
 @import "tailwindcss";
+
+@theme {
+  /* Design.md — Brand & Accent */
+  --color-primary: #0066cc;
+  --color-primary-focus: #0071e3;
+  --color-primary-on-dark: #2997ff;
+
+  /* Design.md — Surface */
+  --color-canvas: #ffffff;
+  --color-parchment: #f5f5f7;
+  --color-pearl: #fafafc;
+  --color-surface-black: #000000;
+  --color-tile-1: #272729;
+
+  /* Design.md — Text */
+  --color-ink: #1d1d1f;
+  --color-ink-muted-80: #333333;
+  --color-ink-muted-48: #7a7a7a;
+  --color-body-muted: #cccccc;
+
+  /* Design.md — Hairlines & Borders */
+  --color-divider-soft: #f0f0f0;
+  --color-hairline: #e0e0e0;
+
+  /* Design.md — Shapes (overrides default radius scale) */
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 18px;
+
+  /* Design.md — Elevation (the one true shadow, product imagery only) */
+  --shadow-product: 3px 5px 30px 0 rgba(0, 0, 0, 0.22);
+
+  /* Design.md — Typography */
+  --font-sans: var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --text-display-lg: 40px;
+  --text-display-lg--line-height: 1.10;
+  --text-display-lg--letter-spacing: 0px;
+  --text-display-lg--font-weight: 600;
+
+  --text-display-md: 34px;
+  --text-display-md--line-height: 1.47;
+  --text-display-md--letter-spacing: -0.374px;
+  --text-display-md--font-weight: 600;
+
+  --text-lead: 28px;
+  --text-lead--line-height: 1.14;
+  --text-lead--letter-spacing: 0.196px;
+  --text-lead--font-weight: 400;
+
+  --text-tagline: 21px;
+  --text-tagline--line-height: 1.19;
+  --text-tagline--letter-spacing: 0.231px;
+  --text-tagline--font-weight: 600;
+
+  --text-body-strong: 17px;
+  --text-body-strong--line-height: 1.24;
+  --text-body-strong--letter-spacing: -0.374px;
+  --text-body-strong--font-weight: 600;
+
+  --text-body: 17px;
+  --text-body--line-height: 1.47;
+  --text-body--letter-spacing: -0.374px;
+  --text-body--font-weight: 400;
+
+  --text-caption: 14px;
+  --text-caption--line-height: 1.43;
+  --text-caption--letter-spacing: -0.224px;
+  --text-caption--font-weight: 400;
+
+  --text-caption-strong: 14px;
+  --text-caption-strong--line-height: 1.29;
+  --text-caption-strong--letter-spacing: -0.224px;
+  --text-caption-strong--font-weight: 600;
+
+  --text-fine-print: 12px;
+  --text-fine-print--line-height: 1.0;
+  --text-fine-print--letter-spacing: -0.12px;
+  --text-fine-print--font-weight: 400;
+
+  --text-nav-link: 12px;
+  --text-nav-link--line-height: 1.0;
+  --text-nav-link--letter-spacing: -0.12px;
+  --text-nav-link--font-weight: 400;
+
+  --text-button-utility: 14px;
+  --text-button-utility--line-height: 1.29;
+  --text-button-utility--letter-spacing: -0.224px;
+  --text-button-utility--font-weight: 400;
+}

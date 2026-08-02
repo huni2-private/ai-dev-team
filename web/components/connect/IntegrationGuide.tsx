@@ -64,29 +64,29 @@ export function IntegrationGuide({ projectName }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
-      <h2 className="text-sm font-semibold text-gray-900 mb-5">5단계 연동 가이드</h2>
+    <div className="bg-canvas rounded-lg border border-hairline p-6">
+      <h2 className="text-caption-strong text-ink mb-5">5단계 연동 가이드</h2>
 
       <ol className="space-y-5">
         {STEPS.map((step) => {
           const codeText = step.isSnippet ? snippet : step.code;
           return (
             <li key={step.num} className="flex gap-4">
-              <div className="shrink-0 w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
+              <div className="shrink-0 w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">
                 {step.num}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900">{step.title}</p>
-                <p className="text-sm text-gray-500 mt-0.5">{step.desc}</p>
+                <p className="text-caption font-medium text-ink">{step.title}</p>
+                <p className="text-caption text-ink-muted-48 mt-0.5">{step.desc}</p>
 
                 {codeText && (
                   <div className="mt-2 relative group">
-                    <pre className="bg-gray-100 rounded-lg px-3 py-2 text-xs font-mono text-gray-800 overflow-auto whitespace-pre-wrap">
+                    <pre className="bg-parchment rounded-sm px-3 py-2 text-xs font-mono text-ink-muted-80 overflow-auto whitespace-pre-wrap">
                       {codeText}
                     </pre>
                     <button
                       onClick={() => handleCopy(codeText, step.num)}
-                      className="absolute top-1.5 right-1.5 px-2 py-1 text-xs bg-white border border-gray-200 rounded hover:bg-gray-50 transition-colors opacity-0 group-hover:opacity-100"
+                      className="absolute top-1.5 right-1.5 px-2 py-1 text-xs bg-canvas border border-hairline rounded-xs hover:bg-parchment transition-colors opacity-0 group-hover:opacity-100"
                     >
                       {copiedStep === step.num ? "✓" : "복사"}
                     </button>

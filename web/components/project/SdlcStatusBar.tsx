@@ -34,10 +34,10 @@ export function SdlcStatusBar({ current }: Props) {
                 className={clsx(
                   "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-colors",
                   isActive
-                    ? "bg-black text-white border-black"
+                    ? "bg-primary text-white border-primary"
                     : isDone
-                    ? "bg-gray-700 text-white border-gray-700"
-                    : "bg-white text-gray-400 border-gray-300"
+                    ? "bg-ink text-white border-ink"
+                    : "bg-canvas text-ink-muted-48 border-hairline"
                 )}
               >
                 {isDone ? "✓" : idx + 1}
@@ -45,7 +45,7 @@ export function SdlcStatusBar({ current }: Props) {
               <span
                 className={clsx(
                   "text-xs whitespace-nowrap",
-                  isActive ? "font-semibold text-black" : "text-gray-400"
+                  isActive ? "font-semibold text-ink" : "text-ink-muted-48"
                 )}
               >
                 {SDLC_PHASES[phase].label}
@@ -55,7 +55,7 @@ export function SdlcStatusBar({ current }: Props) {
               <div
                 className={clsx(
                   "h-0.5 w-8 -mt-4",
-                  idx < currentIdx ? "bg-gray-700" : "bg-gray-200"
+                  idx < currentIdx ? "bg-ink" : "bg-hairline"
                 )}
               />
             )}
