@@ -6,7 +6,7 @@
     "id": "ai-dev-team-self",
     "name": "ai-dev-team",
     "description": "Claude Code 기반 페르소나 개발팀 프레임워크",
-    "sdlcPhase": "implement",
+    "sdlcPhase": "deploy",
     "gitUrl": null
   },
   "personas": [

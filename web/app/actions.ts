@@ -48,6 +48,11 @@ export async function setActivePersonas(id: string, activePersonas: PersonaRole[
   revalidatePath(`/projects/${id}`);
 }
 
+export async function setProjectDomains(id: string, domains: string[]) {
+  await bkend.projects.update(id, { domains });
+  revalidatePath(`/projects/${id}`);
+}
+
 // ── Persona Actions ───────────────────────────────────────────────
 
 export async function createPersona(formData: FormData) {
@@ -60,6 +65,7 @@ export async function createPersona(formData: FormData) {
     raw.split("\n").map((s) => s.trim()).filter(Boolean);
 
   await bkend.personas.create({
+    personaType: "team",
     role,
     displayName,
     systemPrompt,
@@ -88,7 +94,7 @@ export async function updatePersona(id: string, formData: FormData) {
     canDo: parseLines(formData.get("canDo") as string),
     cannotDo: parseLines(formData.get("cannotDo") as string),
     delegateTo,
-  });
+  } as Parameters<typeof bkend.personas.update>[1]);
   revalidatePath(`/personas/${id}`);
   revalidatePath("/personas");
   redirect("/personas");

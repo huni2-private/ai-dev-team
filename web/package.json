@@ -13,7 +13,7 @@
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "@supabase/supabase-js": "^2.49.4",
+    "firebase-admin": "^13.4.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.0",
     "lucide-react": "^0.513.0"

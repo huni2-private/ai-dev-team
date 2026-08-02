@@ -1,26 +1,27 @@
-// Design Ref: §4.2 GET /api/config/[projectId] — .aidev.json 생성 & 반환
-// Plan SC: FR-10 연동 config 생성 & 다운로드
-
+// GET /api/config/[projectId] — .aidev.json 생성 & 반환
 import { NextResponse } from "next/server";
 import { db as bkend } from "@/lib/db";
 import { generateAiDevConfig } from "@/lib/config-generator";
+import { DEFAULT_TEAM_PERSONAS, DEFAULT_DOMAIN_PERSONAS } from "@/lib/default-personas";
 import type { PersonaRecord, PersonaRole } from "@/types/aidev";
-import { DEFAULT_PERSONAS } from "@/lib/default-personas";
 
 function defaultPersonasAsRecords(): PersonaRecord[] {
-  return DEFAULT_PERSONAS.map((p, i) => ({
-    _id: `default-${i}`,
-    role: p.role,
-    displayName: p.displayName,
-    systemPrompt: p.systemPrompt,
-    canDo: p.canDo,
-    cannotDo: p.cannotDo,
-    delegateTo: p.delegateTo,
-    isDefault: true,
+  const now = new Date().toISOString();
+  const team: PersonaRecord[] = DEFAULT_TEAM_PERSONAS.map((p, i) => ({
+    ...p,
+    _id: `default-team-${i}`,
     createdBy: "system",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: now,
+    updatedAt: now,
   }));
+  const domain: PersonaRecord[] = DEFAULT_DOMAIN_PERSONAS.map((p, i) => ({
+    ...p,
+    _id: `default-domain-${i}`,
+    createdBy: "system",
+    createdAt: now,
+    updatedAt: now,
+  }));
+  return [...team, ...domain];
 }
 
 export async function GET(
@@ -31,7 +32,7 @@ export async function GET(
 
   if (!bkend.isConfigured) {
     return NextResponse.json(
-      { error: "Supabase not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY." },
+      { error: "Firebase not configured. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY." },
       { status: 503 }
     );
   }
@@ -48,7 +49,6 @@ export async function GET(
       personas = defaultPersonasAsRecords();
     }
 
-    // 프로젝트에 activePersonas가 없으면 현재 단계 담당 페르소나만 활성화
     if (project.activePersonas.length === 0) {
       const phasePersonaMap: Record<string, PersonaRole> = {
         plan: "pm",

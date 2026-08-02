@@ -21,3 +21,10 @@ Thumbs.db
 # Editor
 .vscode/
 *.swp
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# bkit / Claude Code local runtime state
+.bkit/
+.claude-tmp/
