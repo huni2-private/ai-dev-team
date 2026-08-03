@@ -2,7 +2,7 @@
 
 > Claude Code 기반 페르소나 개발팀 프레임워크 - 역할 강제 + 방향 이탈 감지 + 웹 대시보드
 
-**라이브 데모**: [ai-dev-team.vercel.app](https://ai-dev-team.vercel.app)
+**라이브 데모**: [ai-dev-team-huni2s-projects.vercel.app](https://ai-dev-team-huni2s-projects.vercel.app) (Vercel 팀 계정 로그인 필요)
 
 ## 개요
 
